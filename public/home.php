@@ -1,6 +1,7 @@
 <?php
-
+include_once '../utils/autoloader.php';
 session_start();
+
 // require './utils/connect_db.php';
 
 // if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['connexion'])) {
@@ -23,6 +24,25 @@ session_start();
 //     header("Location: choixquizz.php?id={$_SESSION['user_id']}");
 // }
      
+
+$qcm = new Qcm('musique');
+$question = new Question('quel est la capitale de la France', 'La cap est Paris');
+$answer1 = new Answer('rome');
+$answer2 = new Answer('paris', true);
+$question2 = new Question("quel est la capitale de l'italie", 'La cap est Rome');
+$answer3 = new Answer('rome', true);
+$answer4 = new Answer('paris');
+
+$qcm->addQuestion($question)->addQuestion($question2);
+$question2->addAnswer($answer3)->addAnswer($answer4);
+$question->addAnswer($answer1)->addAnswer($answer2);
+
+
+
+
+
+$qcmManager = new QcmManager();
+echo $qcmManager->generateDisplay($qcm);
 ?>
 
 <!DOCTYPE html>
