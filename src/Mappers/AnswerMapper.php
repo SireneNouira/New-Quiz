@@ -8,7 +8,6 @@ class AnswerMapper
         return new Answer(
             $data['id'],
             $data['answer'],
-            $data['id_question'],
             $data['isCorrect']
         );
     }

@@ -3,7 +3,7 @@ try {
 
 
     $host = "localhost";
-    $dbname = "quiz";
+    $dbname = "new_quiz";
     $login = "root";
     $password = "";
 

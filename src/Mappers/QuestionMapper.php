@@ -8,7 +8,6 @@ class QuestionMapper
         return new Question(
             $data['id'],
             $data['wording'],
-            $data['id_qcm'],
             $data['explanation']
         );
     }

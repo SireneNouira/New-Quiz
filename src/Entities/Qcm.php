@@ -2,13 +2,21 @@
 
 final class Qcm
 {
+    private int $id;
     private string $theme;
     private array $questions;
 
-    public function __construct(string $theme)
+    public function __construct(int $id, string $theme )
     {
+        $this->id = $id;
         $this->theme = $theme;
         $this->questions = [];
+    }
+
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getTheme(): string
