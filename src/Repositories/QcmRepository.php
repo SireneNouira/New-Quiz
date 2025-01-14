@@ -32,7 +32,7 @@ class QcmRepository extends AbstractRepository
             echo "Erreur lors de la requete : " . $error->getMessage();
         }
 
-        $qcm = $this->mapper->mapToObject($qcmData);
+        $qcm = QcmMapper::mapToObject($qcmData);
 
         if($qcm){
             return $qcm;
@@ -41,6 +41,7 @@ class QcmRepository extends AbstractRepository
         }
 
     }
+
     public function findById(string $id): ?Qcm
     {
         $sql = "SELECT * FROM qcm WHERE id = :id";
@@ -57,7 +58,7 @@ class QcmRepository extends AbstractRepository
             echo "Erreur lors de la requete : " . $error->getMessage();
         }
 
-        $qcm = $this->mapper->mapToObject($qcmData);
+        $qcm = QcmMapper::mapToObject($qcmData);
 
         if($qcm){
             return $qcm;

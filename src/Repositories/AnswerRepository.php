@@ -4,12 +4,12 @@ class AnswerRepository extends AbstractRepository
 {
 
   
-    private AnswerMapper $mapper;
+
 
     public function __construct()
     {
         parent::__construct();
-        $this->mapper = new AnswerMapper();
+
     }
 
     /**
@@ -72,9 +72,9 @@ class AnswerRepository extends AbstractRepository
             $stmt->execute([":id_question" => $id_question]);
 
             while ($answerData = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $answers[] = $this->mapper->mapToObject($answerData);
+                $answers[] = AnswerMapper::mapToObject($answerData);
             }
-            var_dump($answers);
+
         } catch (PDOException $error) {
             // Log the error instead of echoing it
             error_log("Erreur lors de la requête findByQuestionId: " . $error->getMessage());

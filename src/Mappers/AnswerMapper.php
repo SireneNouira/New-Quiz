@@ -1,9 +1,9 @@
 <?php
 
 
-class AnswerMapper
+class AnswerMapper implements MapperInterface
 {
-    public function mapToObject(array $data): Answer
+    public static function mapToObject(array $data): Answer
     {
         return new Answer(
             $data['id'],

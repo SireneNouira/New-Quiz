@@ -14,7 +14,12 @@ final class QcmManager
         $this->answerrepository = new AnswerRepository;
     }
 
-    public function getQcmById(int $id): ?Qcm
+    public function generateQcm(int $id): string
+    {
+        return $this->generateDisplay($this->buildQcm($id));
+    }
+
+    private function buildQcm(int $id): ?Qcm
     {
         // Récupération du QCM de base
         $qcm = $this->qcmrepository->findById($id);
@@ -36,69 +41,36 @@ final class QcmManager
         return $qcm;
     }
 
-
-    public function createQcm(string $theme): ?int
+    private function generateDisplay(Qcm $qcm): string
     {
-        return $this->qcmrepository->insert($theme);
-    }
+        ob_start(); ?>
 
-    public function createQcmObjet(string $theme): Qcm
-    {
-        return $this->qcmrepository->findByTheme($theme);;
-    }
+        <section>
 
-    public function createQuestionObject(int $qcmId): array
-    {
-        return $this->questionrepository->findByQcmId($qcmId);
-    }
+            <p> <?= htmlspecialchars($qcm->getTheme()) ?> </p>;
 
-    public function createAnswersObject(int $questionId): array
-    {
-        return $this->answerrepository->findAnswerByQuestionId($questionId);
-    }
+            <?php
 
-    public function getQcmDetailsById(int $id): ?array
-    {
-        $qcm = $this->qcmrepository->findById($id);
+            foreach ($qcm->getQuestions() as $question) { ?>
+                <h3> <?= htmlspecialchars($question->getWording()) ?> </h3>
 
-        if ($qcm) {
-            return [
-                "theme" => strtoupper($qcm->getTheme()),
-                "wording" => ($qcm->getQuestions())
-            ];
-        }
-    }
- public function answersByQuestions(array $questions)
-{
-    foreach ($questions as $question) {
-        $this->answerrepository->findAnswerByQuestionId($question->getId());
-        var_dump($question);
-    }
-    
-}
-    public function generateDisplay(string $theme): string
-    {
+                <ul> <?php
 
-        $qcm = $this->createQcmObjet($theme);
-        $questions = $this->createQuestionObject($qcm->getId());
-$this->answersByQuestions($questions);
-        $answers = $this->createAnswersObject(1);
-       
+                        foreach ($question->getAnswers() as $answer) {  ?>
+                        <li> <?= htmlspecialchars($answer->getAnswer()) ?> </li>;
+                <?php
+                        }
+                    }
+                ?>
+                </ul>
+
+        </section>
 
 
-        $html = "<p>" . htmlspecialchars($qcm->getTheme()) . "</p>";
 
-        foreach ($qcm->getQuestions() as $question) {
-            $html .= "<h3>" . htmlspecialchars($question->getWording()) . "</h3>";
-            $html .= "<ul>";
 
-            foreach ($question->getAnswers() as $answer) {
-                $html .= "<li>" . htmlspecialchars($answer->getAnswer()) . "</li>";
-            }
 
-            $html .= "</ul>";
-        }
-
-        return $html;
+<?php
+        return ob_get_clean();
     }
 }

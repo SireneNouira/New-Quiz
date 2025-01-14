@@ -1,8 +1,8 @@
 <?php
 
-class QcmMapper
+class QcmMapper implements MapperInterface
 {
-    public function mapToObject(array $data): Qcm
+    public static function mapToObject(array $data): Qcm
     {
         return new Qcm(
             $data['id'],

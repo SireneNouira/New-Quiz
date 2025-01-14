@@ -71,7 +71,7 @@ class QuestionRepository extends AbstractRepository
             $stmt->execute([":id_qcm" => $id_qcm]);
 
             while ($questionData = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $questions[] = $this->mapper->mapToObject($questionData);
+                $questions[] = QuestionMapper::mapToObject($questionData);
             }
         } catch (PDOException $error) {
             // Log the error instead of echoing it

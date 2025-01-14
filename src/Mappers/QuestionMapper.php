@@ -1,9 +1,9 @@
 <?php
 
 
-class QuestionMapper
+class QuestionMapper implements MapperInterface
 {
-    public function mapToObject(array $data): Question
+    public static function mapToObject(array $data): Question
     {
         return new Question(
             $data['id'],

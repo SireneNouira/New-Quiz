@@ -26,7 +26,7 @@ session_start();
 
 
 $qcmManager = new QcmManager();
-echo $qcmManager->generateDisplay("Mathématiques");
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +50,8 @@ echo $qcmManager->generateDisplay("Mathématiques");
         </ul>
       </nav>
     </header>
+
+    <?= $qcmManager->generateQcm(1) ?>
     
     <main>
       <div class="login-container">
