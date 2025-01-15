@@ -41,34 +41,30 @@ final class QcmManager
         return $qcm;
     }
 
-    private function generateDisplay(Qcm $qcm): string
+
+    private function generateDisplay(Qcm $qcm, int $currentQuestionIndex = 0): string
     {
-        ob_start(); ?>
- <main>
-        <section>
+        $questions = $qcm->getQuestions();
+        if (!isset($questions[$currentQuestionIndex])) {
+            return '<p>Fin du quiz !</p>';
+        }
 
-            <p> <?= htmlspecialchars($qcm->getTheme()) ?> </p>;
-
-            <?php
-
-            foreach ($qcm->getQuestions() as $question) : ?>
-                <h3> <?= htmlspecialchars($question->getWording()) ?> </h3>
-
-                <ul> <?php
-
-                        foreach ($question->getAnswers() as $answer) :  ?>
-                        <li> <?= htmlspecialchars($answer->getAnswer()) ?> </li>;
-                <?php
-                        endforeach;
-                    endforeach
-                ?>
+        $question = $questions[$currentQuestionIndex];
+        ob_start(); 
+    ?>
+        <main>
+            <section>
+                <p><?= htmlspecialchars($qcm->getTheme()) ?></p>
+                <h3><?= htmlspecialchars($question->getWording()) ?></h3>
+                <ul>
+                    <?php foreach ($question->getAnswers() as $answer): ?>
+                        <li><?= htmlspecialchars($answer->getAnswer()) ?></li>
+                    <?php endforeach; ?>
                 </ul>
-
-        </section>
-</main>
-
-
-<?php
+                <button id="next-question" data-current="<?= $currentQuestionIndex ?>">Suivant</button>
+            </section>
+        </main>
+    <?php
         return ob_get_clean();
     }
 }

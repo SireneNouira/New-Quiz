@@ -8,10 +8,7 @@ $qcmManager = new QcmManager();
 require_once './partials/header.php'
 ?>
 
-<main>
-  <section>
   <?= $qcmManager->generateQcm(1) ?>
-
 
 <?php
 require_once './partials/footer.php'
