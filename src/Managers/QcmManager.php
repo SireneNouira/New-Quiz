@@ -44,7 +44,7 @@ final class QcmManager
     private function generateDisplay(Qcm $qcm): string
     {
         ob_start(); ?>
-
+ <main>
         <section>
 
             <p> <?= htmlspecialchars($qcm->getTheme()) ?> </p>;
@@ -65,9 +65,7 @@ final class QcmManager
                 </ul>
 
         </section>
-
-
-
+</main>
 
 
 <?php

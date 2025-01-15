@@ -10,8 +10,6 @@ final class Database
         $this->pdo = null;
     }
 
-
-
     public static function getConnection(): PDO
     {
         if (self::$pdo === null) {
