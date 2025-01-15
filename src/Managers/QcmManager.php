@@ -3,15 +3,15 @@
 final class QcmManager
 {
 
-    private QcmRepository $qcmrepository;
-    private QuestionRepository $questionrepository;
-    private AnswerRepository $answerrepository;
+    private QcmRepository $qcmRepository;
+    private QuestionRepository $questionRepository;
+    private AnswerRepository $answerRepository;
 
     public function __construct()
     {
-        $this->qcmrepository = new QcmRepository;
-        $this->questionrepository = new QuestionRepository;
-        $this->answerrepository = new AnswerRepository;
+        $this->qcmRepository = new QcmRepository;
+        $this->questionRepository = new QuestionRepository;
+        $this->answerRepository = new AnswerRepository;
     }
 
     public function generateQcm(int $id): string
@@ -22,16 +22,16 @@ final class QcmManager
     private function buildQcm(int $id): ?Qcm
     {
         // Récupération du QCM de base
-        $qcm = $this->qcmrepository->findById($id);
+        $qcm = $this->qcmRepository->findById($id);
         if (!$qcm) {
             return null;
         }
 
         // Récupération des questions associées au QCM
-        $questions = $this->questionrepository->findByQcmId($id);
+        $questions = $this->questionRepository->findByQcmId($id);
         foreach ($questions as $question) {
             // Récupération des réponses associées à chaque question
-            $answers = $this->answerrepository->findAnswerByQuestionId($question->getId());
+            $answers = $this->answerRepository->findAnswerByQuestionId($question->getId());
             $question->setAnswers($answers);
         }
 
