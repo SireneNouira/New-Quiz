@@ -16,7 +16,19 @@ final class QcmManager
 
     public function generateQcm(int $id): string
     {
-        return $this->generateDisplayQuiz($this->buildQcm($id));
+        $qcm = $this->buildQcm($id);
+
+        session_start();
+
+        if (!isset($_SESSION['qcm']) && !isset($_SESSION['current_question'])) {
+
+            $_SESSION[$_GET['quiz_id']];
+            $_SESSION['qcm'] = $qcm;
+            $_SESSION['current_question'] = 0;
+        }
+
+
+        return $this->generateDisplayQuiz($qcm, $_SESSION['current_question']);
     }
 
     private function buildQcm(int $id): ?Qcm
@@ -41,32 +53,61 @@ final class QcmManager
         return $qcm;
     }
 
-    public function generateDisplayQuiz(Qcm $qcm, int $currentQuestionIndex = 0): string
+    public function generateDisplayQuiz(Qcm $qcm, int $currentQuestionIndex = 0, ?int $score = null, bool $finished = false): string
     {
         $questions = $qcm->getQuestions();
-       
-        if (!isset($questions[$currentQuestionIndex])) {
-            return '<p>Fin du quiz !</p>';
-        }
 
-        $question = $questions[$currentQuestionIndex];
         ob_start();
 ?>
         <main>
-            <section>
-                <h1><?= htmlspecialchars($qcm->getTheme()) ?></h1>
-                <h3><?= htmlspecialchars($question->getWording()) ?></h3>
-                <ul>
-                    <?php foreach ($question->getAnswers() as $answer): ?>
-                        <li><?= htmlspecialchars($answer->getAnswer()) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-                <button id="next-question" data-current="<?= $currentQuestionIndex ?>">Suivant</button>
-            </section>
+            <article class="input-field3">
+                <div>
+                    <h1><?= htmlspecialchars($qcm->getTheme()) ?></h1>
+
+                    <?php if (!$finished && isset($questions[$currentQuestionIndex])): ?>
+                        <h2>Question <?= $currentQuestionIndex + 1; ?>/<?= count($questions); ?></h2>
+                    <?php endif; ?>
+                </div>
+
+                <div id="quiz-container">
+                    <?php if ($finished): ?>
+                        <h3>Quiz terminé ! Votre score : <?= $score; ?> / <?= count($questions); ?></h3>
+                        <a href="../choixquizz.php" class="login-btn3">Revenir au menu</a>
+                    <?php else: ?>
+                        <?php if (isset($questions[$currentQuestionIndex])): ?>
+                            <?php $question = $questions[$currentQuestionIndex]; ?>
+                            <h3 class="question" id="question-text">
+                                <?= htmlspecialchars($question->getWording()); ?>
+                            </h3>
+
+                            <form method="post" action="../public/process/handleNext.php">
+                                <div id="answers">
+                                    <?php foreach ($question->getAnswers() as $answer): ?>
+                                        <input
+                                            class="reponses"
+                                            type="radio"
+                                            name="answer"
+                                            value="<?= $answer->getId(); ?>"
+                                            data-correct="<?= $answer->getIsCorrect() ? '1' : '0'; ?>">
+                                        <?= htmlspecialchars($answer->getAnswer()); ?>
+                                        </input>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <button id="suivant-btn" class="suivant-btn-off" type="submit" name="suivant">Suivant</button>
+                            </form>
+                        <?php else: ?>
+                            <?php var_dump($_SESSION)?>
+                            <p>Aucune question disponible.</p>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </article>
         </main>
     <?php
         return ob_get_clean();
     }
+
 
     public function displayAllQcm(): string
     {
@@ -99,12 +140,12 @@ final class QcmManager
                                 <button type="submit" class="login-btn2" name="jouer">Jouer</button>
                             </form>
                         </div> <?php endforeach ?>
-                </div>      <a href="./logout.php" class="login-btn ">DECONNEXION</a>
+                </div> <a href="./logout.php" class="login-btn ">DECONNEXION</a>
             </article>
-      
-          
-        </main>  
+
+
+        </main>
 <?php
-                    return ob_get_clean();
-                }
+        return ob_get_clean();
+    }
 }

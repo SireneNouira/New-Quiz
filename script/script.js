@@ -1,18 +1,40 @@
-document.addEventListener('click', (event) => {
-    if (event.target.id === 'next-question') {
-        const button = event.target;
-        const currentIndex = parseInt(button.dataset.current, 10);
-        const qcmId = 1; // Remplace par l'ID dynamique du QCM si nécessaire
-
-        fetch('path/to/ajax/endpoint', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ qcmId, currentQuestionIndex: currentIndex + 1 })
-        })
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('main').innerHTML = html;
-            })
-            .catch(error => console.error('Erreur AJAX :', error));
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll('[name="answer"]'); // Select all elements whose ID starts with "answer"
+  
+  
+  
+    buttons.forEach((button) => {
+      button.addEventListener("click", handleAnswerClick);
+    });
+  
+  
+    
+  
+    function handleAnswerClick(event) {
+      const button = event.target; // Get the clicked button
+   
+  
+      const isCorrect = button.getAttribute("data-correct") === "1";
+  
+  
+      if (isCorrect) {
+        button.classList.add("correct");
+  
+      } else {
+        button.classList.add("incorrect");
+      }
+  
+    
+  
+      let suivantButton = document.getElementById("suivant-btn");
+     
+      suivantButton.classList.remove("suivant-btn-off");
+      suivantButton.classList.add("suivant-btn-on");
+  
+      
     }
-});
+  });
+  
+  
+  let scoreElement = document.getElementById('score');
+  
