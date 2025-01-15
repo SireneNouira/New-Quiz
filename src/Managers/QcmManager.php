@@ -51,16 +51,16 @@ final class QcmManager
 
             <?php
 
-            foreach ($qcm->getQuestions() as $question) { ?>
+            foreach ($qcm->getQuestions() as $question) : ?>
                 <h3> <?= htmlspecialchars($question->getWording()) ?> </h3>
 
                 <ul> <?php
 
-                        foreach ($question->getAnswers() as $answer) {  ?>
+                        foreach ($question->getAnswers() as $answer) :  ?>
                         <li> <?= htmlspecialchars($answer->getAnswer()) ?> </li>;
                 <?php
-                        }
-                    }
+                        endforeach;
+                    endforeach
                 ?>
                 </ul>
 
