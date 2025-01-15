@@ -5,10 +5,7 @@ final class Database
 
     private static ?PDO $pdo;
 
-    private function __construct()
-    {
-        $this->pdo = null;
-    }
+    
 
     public static function getConnection(): PDO
     {
