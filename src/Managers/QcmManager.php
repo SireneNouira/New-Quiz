@@ -41,6 +41,14 @@ final class QcmManager
         return $qcm;
     }
 
+    public function getQuestionAjax(): void
+    {
+        $qcmId = $_POST['qcmId'];
+        $currentQuestionIndex = (int)$_POST['currentQuestionIndex'];
+    
+        $qcm = $this->buildQcm($qcmId);
+        echo $this->generateDisplay($qcm, $currentQuestionIndex);
+    }
 
     private function generateDisplay(Qcm $qcm, int $currentQuestionIndex = 0): string
     {
