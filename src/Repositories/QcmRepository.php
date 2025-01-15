@@ -26,7 +26,7 @@ class QcmRepository extends AbstractRepository
             $stmt->execute([
                 ":theme" => $theme
             ]);
-            $qcmData = $stmt->fetch(PDO::FETCH_ASSOC);
+            $qcmData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $error) {
             echo "Erreur lors de la requete : " . $error->getMessage();

@@ -54,7 +54,7 @@ final class QcmManager
     ?>
         <main>
             <section>
-                <p><?= htmlspecialchars($qcm->getTheme()) ?></p>
+                <h1><?= htmlspecialchars($qcm->getTheme()) ?></h1>
                 <h3><?= htmlspecialchars($question->getWording()) ?></h3>
                 <ul>
                     <?php foreach ($question->getAnswers() as $answer): ?>
