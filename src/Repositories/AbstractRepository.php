@@ -1,9 +1,12 @@
 <?php
 
-abstract class AbstractRepository {
+
+abstract class AbstractRepository 
+{
     protected PDO $pdo;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->pdo = Database::getConnection();
     }
 }

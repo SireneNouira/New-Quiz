@@ -62,7 +62,6 @@ p {
 }
 .flex {
   display: flex;
-  flex-wrap: wrap;
   gap: 20%;
 }
 
@@ -107,7 +106,7 @@ font-size: 16px;
   padding: 12px;
   font-size: 18px;
   margin: 10px 0;
-  width: 400px;
+  width: 100vw;
   border-radius: 40px;
 }
 
@@ -121,7 +120,6 @@ font-size: 16px;
   padding: 12px;
   font-size: 18px;
   margin: 10px 0;
-  width: 400px;
   border-radius: 40px;
 }
 
@@ -140,7 +138,7 @@ font-size: 16px;
 }
 
 .card {
-  width: 40%;
+  width: auto;
   height: 300px;
   text-align: center;
   background-color: #fff;

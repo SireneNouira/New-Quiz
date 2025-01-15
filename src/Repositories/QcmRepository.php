@@ -1,46 +1,31 @@
 <?php
 
-class QcmRepository extends AbstractRepository
+final class QcmRepository extends AbstractRepository
 {
 
-    
+
     private QcmMapper $mapper;
 
     public function __construct()
     {
         parent::__construct();
         $this->mapper = new QcmMapper();
-   
     }
 
-    /**
-     * Trouve un qcm en fonction de son id
-     */
-    public function findByTheme(string $theme): ?Qcm
+    
+    public function findAll(): array
     {
-        $sql = "SELECT * FROM qcm WHERE theme = :theme";
+        $query = "SELECT * FROM qcm";
+        $stmt = $this->pdo->query($query);
+        $qcmDatas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        try {
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
-                ":theme" => $theme
-            ]);
-            $qcmData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        } catch (PDOException $error) {
-            echo "Erreur lors de la requete : " . $error->getMessage();
+        foreach ($qcmDatas as $qcmData) {
+            $qcms[] = QcmMapper::mapToObject($qcmData);
         }
 
-        $qcm = QcmMapper::mapToObject($qcmData);
-
-        if($qcm){
-            return $qcm;
-        } else {
-            return null;
-        }
-
+        return $qcms;
     }
+    
 
     public function findById(string $id): ?Qcm
     {
@@ -53,23 +38,21 @@ class QcmRepository extends AbstractRepository
                 ":id" => $id
             ]);
             $qcmData = $stmt->fetch(PDO::FETCH_ASSOC);
-
         } catch (PDOException $error) {
             echo "Erreur lors de la requete : " . $error->getMessage();
         }
 
         $qcm = QcmMapper::mapToObject($qcmData);
 
-        if($qcm){
+        if ($qcm) {
             return $qcm;
         } else {
             return null;
         }
-
     }
 
 
-    public function insert(string $theme) : ?int
+    public function insert(string $theme): ?int
     {
         $sql = "INSERT INTO `qcm`(`theme`) VALUES (:theme)";
 
@@ -78,7 +61,7 @@ class QcmRepository extends AbstractRepository
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
                 ":theme" => $theme
-            ]); 
+            ]);
 
             // Retourne l'ID du QCM inséré
             return (int) $this->pdo->lastInsertId();
@@ -86,5 +69,4 @@ class QcmRepository extends AbstractRepository
             echo "Erreur lors de la requete : " . $error->getMessage();
         }
     }
-
 }

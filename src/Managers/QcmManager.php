@@ -16,7 +16,7 @@ final class QcmManager
 
     public function generateQcm(int $id): string
     {
-        return $this->generateDisplay($this->buildQcm($id));
+        return $this->generateDisplayQuiz($this->buildQcm($id));
     }
 
     private function buildQcm(int $id): ?Qcm
@@ -41,25 +41,17 @@ final class QcmManager
         return $qcm;
     }
 
-    public function getQuestionAjax(): void
-    {
-        $qcmId = $_POST['qcmId'];
-        $currentQuestionIndex = (int)$_POST['currentQuestionIndex'];
-    
-        $qcm = $this->buildQcm($qcmId);
-        echo $this->generateDisplay($qcm, $currentQuestionIndex);
-    }
-
-    private function generateDisplay(Qcm $qcm, int $currentQuestionIndex = 0): string
+    public function generateDisplayQuiz(Qcm $qcm, int $currentQuestionIndex = 0): string
     {
         $questions = $qcm->getQuestions();
+       
         if (!isset($questions[$currentQuestionIndex])) {
             return '<p>Fin du quiz !</p>';
         }
 
         $question = $questions[$currentQuestionIndex];
-        ob_start(); 
-    ?>
+        ob_start();
+?>
         <main>
             <section>
                 <h1><?= htmlspecialchars($qcm->getTheme()) ?></h1>
@@ -75,4 +67,44 @@ final class QcmManager
     <?php
         return ob_get_clean();
     }
+
+    public function displayAllQcm(): string
+    {
+        // Récupérer tous les QCM depuis le repository
+        $qcms = $this->qcmRepository->findAll();
+
+        // Utiliser la méthode generateDisplayChoix pour générer l'affichage
+        return $this->generateDisplayChoix($qcms);
+    }
+
+
+    private function generateDisplayChoix(array $qcms): string
+    {
+        ob_start();
+    ?>
+        <main>
+
+
+            <article class="input-field2">
+                <h1>HELLO</h1>
+
+                <div class="flex">
+                    <?php
+                    foreach ($qcms as $qcm) : ?>
+                        <div class="card">
+                            <img src="assets/imgs/iconquizfinal.png" alt="logo-quiz">
+                            <h2><?= htmlspecialchars($qcm->getTheme()); ?></h2>
+                            <form method="POST" action="../public/process/handlePlay.php">
+                                <input type="hidden" name="quiz_id" value="<?= htmlspecialchars($qcm->getId()); ?>">
+                                <button type="submit" class="login-btn2" name="jouer">Jouer</button>
+                            </form>
+                        </div> <?php endforeach ?>
+                </div>      <a href="./logout.php" class="login-btn ">DECONNEXION</a>
+            </article>
+      
+          
+        </main>  
+<?php
+                    return ob_get_clean();
+                }
 }

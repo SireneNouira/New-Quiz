@@ -18,6 +18,9 @@ spl_autoload_register(function ($className) {
         case substr($className, -9) === 'Interface':
                 $directory = 'Interfaces';
                 break;
+        case substr($className, -10) === 'Controller':
+                $directory = 'Controllers';
+                break;
         default:
             $directory = 'Entities';
             break;
